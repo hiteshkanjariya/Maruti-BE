@@ -21,6 +21,7 @@ const complaintSchema = new mongoose.Schema({
         amount: { type: Number, default: 0 },
         status: { type: String, enum: ['paid', 'unpaid'], default: 'unpaid' },
         method: { type: String, enum: ['cash', 'online', 'upi'], default: 'cash' },
+        notes: { type: String }
     },
 
     technicianNotes: String,

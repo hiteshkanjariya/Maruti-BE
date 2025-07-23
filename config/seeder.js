@@ -20,8 +20,8 @@ const seedUsers = async () => {
 
         // Create and save users (pre-save hook will hash passwords)
         const users = [
-            new User({ phone: '1234567890', password: 'admin123', role: 'admin' }),
-            new User({ phone: '1234567891', password: 'user123', role: 'user' }),
+            new User({ phone: '1234567890', password: 'admin123', role: 'admin', name: 'admin' }),
+            new User({ phone: '1234567891', password: 'user123', role: 'user', name: 'user' }),
         ];
 
         for (const user of users) {

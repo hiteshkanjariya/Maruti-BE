@@ -41,8 +41,10 @@ exports.getComplaints = async (req, res) => {
 exports.getComplaintById = async (req, res) => {
     try {
         const complaint = await Complaint.findById(req.params.id)
-            .populate('createdBy', 'name phone');
+            .populate('createdBy', 'name')
+            .populate('updatedBy', 'name');
 
+        console.log("🚀 ~ exports.getComplaintById= ~ complaint:", complaint)
         if (!complaint) return res.status(404).json({ message: 'Complaint not found' });
 
         // Only allow non-admin to access their own complaint
@@ -50,7 +52,7 @@ exports.getComplaintById = async (req, res) => {
             return res.status(403).json({ message: 'Unauthorized' });
         }
 
-        res.status(200).json({ complaint });
+        res.status(200).json({ data: complaint });
     } catch (error) {
         console.error('Error fetching complaint by ID:', error);
         res.status(500).json({ message: 'Server error' });
@@ -68,9 +70,9 @@ exports.updateComplaint = async (req, res) => {
         }
 
         // If not admin, allow only creator to update
-        if (req.user.role !== 'admin' && existingComplaint.createdBy.toString() !== req.user._id.toString()) {
-            return res.status(403).json({ message: 'Unauthorized' });
-        }
+        // if (req.user.role !== 'admin' && existingComplaint.createdBy.toString() !== req.user._id.toString()) {
+        //     return res.status(403).json({ message: 'Unauthorized' });
+        // }
 
         // Merge updated fields (all optional)
         Object.assign(existingComplaint, req.body);
@@ -119,3 +121,31 @@ exports.updateStatus = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 }
+
+exports.updatePaymentDetails = async (req, res) => {
+    try {
+        const { amount, status, method, notes } = req.body;
+
+        const complaint = await Complaint.findById(req.params.id);
+        if (!complaint) return res.status(404).json({ message: 'Complaint not found' });
+
+        // Optional: Authorization check
+        if (req.user.role !== 'admin' && complaint.createdBy.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ message: 'Unauthorized' });
+        }
+
+        // Update payment fields only
+        if (amount !== undefined) complaint.payment.amount = amount;
+        if (status) complaint.payment.status = status;
+        if (method) complaint.payment.method = method;
+        if (notes !== undefined) complaint.payment.notes = notes;
+
+        complaint.updatedBy = req.user._id;
+        await complaint.save();
+
+        res.status(200).json({ message: 'Payment details updated successfully', data: complaint });
+    } catch (error) {
+        console.error('Error updating payment details:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
