@@ -6,6 +6,7 @@ const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
 const userRoute = require("./routes/userRoutes");
 const complainRoutes = require("./routes/complaints")
+const dashboardRoutes = require("./routes/dashboardRoutes")
 const errorHandler = require('./middlewares/errorMiddleware');
 
 dotenv.config();
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoute);
 app.use('/api/complaint', complainRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
