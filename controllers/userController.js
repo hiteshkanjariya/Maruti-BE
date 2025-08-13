@@ -41,8 +41,7 @@ exports.updateUser = async (req, res) => {
         user.role = role;
 
         if (password) {
-            const hashedPassword = await bcrypt.hash(password, 10);
-            user.password = hashedPassword;
+            user.password = password;
         }
 
         await user.save();

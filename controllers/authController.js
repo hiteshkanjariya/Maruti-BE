@@ -16,9 +16,11 @@ exports.login = async (req, res) => {
 
     try {
         const user = await User.findOne({ phone });
+        console.log("🚀 ~ user:", user)
         if (!user) return res.status(401).json({ error: 'Invalid credentials' });
 
         const isMatch = await user.comparePassword(password);
+        console.log("🚀 ~ isMatch:", isMatch)
         if (!isMatch) return res.status(401).json({ error: 'Invalid credentials' });
 
         const token = generateToken(user);

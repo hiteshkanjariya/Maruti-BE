@@ -25,6 +25,7 @@ const complaintSchema = new mongoose.Schema({
     },
 
     technicianNotes: String,
+    assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // 🆕 assigned user
 
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
