@@ -66,8 +66,6 @@ exports.getMyComplaints = async (req, res) => {
     }
 };
 
-
-
 exports.getComplaintById = async (req, res) => {
     try {
         const complaint = await Complaint.findById(req.params.id)
