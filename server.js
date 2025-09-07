@@ -29,21 +29,21 @@ app.use('/api/user', userRoute);
 app.use('/api/complaint', complainRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 
-// Catch-all route for debugging
-app.use('*', (req, res) => {
-    res.status(404).json({
-        error: 'Route not found',
-        method: req.method,
-        path: req.originalUrl,
-        availableRoutes: [
-            'GET /',
-            'POST /api/auth/login',
-            'GET /api/user/*',
-            'GET /api/complaint/*',
-            'GET /api/dashboard/*'
-        ]
-    });
-});
+// // Catch-all route for debugging
+// app.use('*', (req, res) => {
+//     res.status(404).json({
+//         error: 'Route not found',
+//         method: req.method,
+//         path: req.originalUrl,
+//         availableRoutes: [
+//             'GET /',
+//             'POST /api/auth/login',
+//             'GET /api/user/*',
+//             'GET /api/complaint/*',
+//             'GET /api/dashboard/*'
+//         ]
+//     });
+// });
 
 // Error handler middleware should be after all routes
 app.use(errorHandler);
