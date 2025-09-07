@@ -15,10 +15,38 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Root route for health check
+app.get('/', (req, res) => {
+    res.json({ 
+        message: 'Maruti BE API is running!', 
+        status: 'success',
+        timestamp: new Date().toISOString()
+    });
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoute);
 app.use('/api/complaint', complainRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+
+// Catch-all route for debugging
+app.use('*', (req, res) => {
+    res.status(404).json({
+        error: 'Route not found',
+        method: req.method,
+        path: req.originalUrl,
+        availableRoutes: [
+            'GET /',
+            'POST /api/auth/login',
+            'GET /api/user/*',
+            'GET /api/complaint/*',
+            'GET /api/dashboard/*'
+        ]
+    });
+});
+
+// Error handler middleware should be after all routes
+app.use(errorHandler);
 
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -29,5 +57,3 @@ mongoose.connect(process.env.MONGO_URI, {
         console.log(`Server running on port ${process.env.PORT}`);
     });
 }).catch(err => console.error('MongoDB error:', err));
-
-app.use(errorHandler)
