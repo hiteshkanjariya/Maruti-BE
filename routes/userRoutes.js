@@ -6,7 +6,7 @@ const { auth, adminOnly } = require('../middlewares/auth');
 // Add new user (Admin only)
 router.post('/', auth, adminOnly, addUser);
 router.get('/', auth, adminOnly, getAllUsers);
-router.delete('/:id', deleteUser);
+router.delete('/:id',auth, adminOnly, deleteUser);
 
 
 // Update existing user (Admin only)
